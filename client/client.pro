@@ -17,9 +17,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
+    statusandmenubar.cpp \
     widget.cpp
 
 HEADERS += \
+    statusandmenubar.h \
     widget.h
 
 FORMS +=
