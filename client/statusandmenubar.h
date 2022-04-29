@@ -16,9 +16,6 @@ public:
     void setNetworkConnect();
     void setNetworkNotConncet();
 
-signals:
-
-private:
     QMenuBar *mebr;
     QMenu * m1;
     QMenu * m2;
@@ -39,6 +36,13 @@ private:
     QStatusBar * stbr;
     QLabel *lab1;
     QWidget *widt;
+
+signals:
+
+
+
+
+private:
 
 };
 

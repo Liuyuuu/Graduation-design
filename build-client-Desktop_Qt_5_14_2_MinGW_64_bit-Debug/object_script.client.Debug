@@ -1,0 +1,13 @@
+debug/board.o
+debug/login.o
+debug/main.o
+debug/network.o
+debug/statusandmenubar.o
+debug/stone.o
+debug/widget.o
+debug/moc_board.o
+debug/moc_login.o
+debug/moc_network.o
+debug/moc_statusandmenubar.o
+debug/moc_stone.o
+debug/moc_widget.o
