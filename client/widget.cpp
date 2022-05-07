@@ -3,24 +3,25 @@
 
 widget::widget(QWidget *parent) : QWidget(parent)
 {
-    //setFixedSize(860, 680);
+    setFixedSize(860, 680);
     //setFixedSize(1400, 980);
-    //tcp = new network(this);
+    tcp = new network(this);
     stme = new statusAndMenuBar(this);
     lgn = new login(this);
 
-    // connectedSlots();
+    connectedSlots();
 
-    if(true)
+    if(false)
     {
         lgn->close();
         setFixedSize(1400, 980);
         stme->mebr->setFixedSize(1400,30);
         stme->stbr->setGeometry(0,950, 1400, 30);
+        boardChess = new board(this, true);
     }
 
 
-    boardChess = new board(this, false);
+
 
 
 

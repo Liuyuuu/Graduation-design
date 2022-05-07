@@ -22,6 +22,15 @@ public:
     void moveChess(QPoint pt);
     int pointToId(QPoint p);
 
+    bool rule(int FirstPointId);
+    bool king();
+    bool che();
+    bool ma();
+    bool xiang();
+    bool shi();
+    bool pao();
+    bool bing();
+
     //返回像素坐标
 
     QPoint center(int row, int col);

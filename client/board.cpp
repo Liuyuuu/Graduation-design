@@ -14,7 +14,6 @@ board::board(QWidget *parent, bool mainRed) : QWidget(parent), myRed(mainRed)
     for(int i = 1; i <= 32; i++)
     {
         s[i].init(i, myRed);
-        qDebug() << s[i].getText() << center(i) << s[i].red;
     }
 }
 
@@ -92,8 +91,6 @@ void board::paintEvent(QPaintEvent *)
     painter->end();
 }
 
-
-
 void board::mouseReleaseEvent(QMouseEvent *ev)
 {
     QPoint pt = ev->pos();
@@ -109,7 +106,7 @@ void board::moveChess(QPoint pt)
 
     saveFirstPoint = saveSecondPoint;
 
-    bRet = getRowCol(pt, row, col);
+    bRet = getRowCol(pt, row, col); // 返回point
     updateId(row, col);
     if(bRet)
     {
@@ -119,7 +116,7 @@ void board::moveChess(QPoint pt)
         }
         else
         {
-            saveSecondPoint = center(row, col);
+            saveSecondPoint = QPoint(row, col);
         }
     }
     else
@@ -129,25 +126,32 @@ void board::moveChess(QPoint pt)
 
     int temp = pointToId(saveFirstPoint);
     int temp2 = pointToId(saveSecondPoint);
-    if(temp && s[temp].red == myRed)
+    if(temp && s[temp].red == myRed && temp != -1)
     {
         if(temp2 == 0)
         {
-            s[temp].row = saveSecondPoint.x();
-            s[temp].col = saveSecondPoint.y();
-            qDebug() << "移动";
-        }else if(temp2 != temp && s[temp2].red != myRed)
+            if(rule(temp))
+            {
+                s[temp].row = saveSecondPoint.x();
+                s[temp].col = saveSecondPoint.y();
+                saveSecondPoint = QPoint(0,0);
+                qDebug() << "移动" << temp << temp2;
+            }
+
+        }else if(temp2 != temp && s[temp2].red != myRed && temp2 != -1)
         {
-            s[temp2].dead = true;
-            s[temp].row = saveSecondPoint.x();
-            s[temp].col = saveSecondPoint.y();
-            qDebug() << "吃棋";
+            if(rule(temp))
+            {
+                s[temp2].dead = true;
+                s[temp].row = saveSecondPoint.x();
+                s[temp].col = saveSecondPoint.y();
+                saveSecondPoint = QPoint(0,0);
+                qDebug() << "吃棋" << temp << temp2;
+            }
         }
 
 
     }
-
-
 
     update();
 }
@@ -169,7 +173,6 @@ bool board::getRowCol(QPoint pt, int &row, int &col)
     return false;
 }
 
-
 void board::updateId(int row, int col)
 {
     for(int i = 1; i <= 32; i++)
@@ -186,10 +189,10 @@ void board::updateId(int row, int col)
     }
 }
 
-
 int board::pointToId(QPoint p)
 {
     int i = 1;
+    if(p == QPoint(0,0)) return -1;
     for(; i <= 32; i++)
     {
         if(s[i].row == p.x() && s[i].col == p.y() && s[i].dead == false)
@@ -201,7 +204,6 @@ int board::pointToId(QPoint p)
     else return i;
 }
 
-
 QPoint board::center(int row, int col)
 {
     return QPoint(col * d, row * d);
@@ -211,6 +213,439 @@ QPoint board::center(int id)
 {
     return center(s[id].row, s[id].col);
 }
+
+bool board::rule(int FirstPointId)
+{
+    switch(s[FirstPointId].type)
+    {
+    case Stone::KING: return king();
+    case Stone::CHE:return che();
+    case Stone::MA:return ma();
+    case Stone::PAO:return pao();
+    case Stone::XIANG:return xiang();
+    case Stone::SHI:return shi();
+    case Stone::BING:return bing();
+    default:
+        return false;
+    }
+}
+
+bool board::king()
+{
+    int num = 1;
+    if(! ((saveSecondPoint.x() == saveFirstPoint.x()+num && saveSecondPoint.y() == saveFirstPoint.y()) ||
+       (saveSecondPoint.x() == saveFirstPoint.x()-num && saveSecondPoint.y() == saveFirstPoint.y()) ||
+       (saveSecondPoint.y() == saveFirstPoint.y()+num && saveSecondPoint.x() == saveFirstPoint.x()) ||
+       (saveSecondPoint.y() == saveFirstPoint.y()-num && saveSecondPoint.x() == saveFirstPoint.x())
+      ))
+    {
+        qDebug() << "不在四周！(" << saveFirstPoint.x() << saveFirstPoint.y() << ")(" << saveSecondPoint.x() << saveSecondPoint.y() << ")";
+        return false;
+    }
+
+    if((saveSecondPoint.x() < 8 || saveSecondPoint.x() > 10) || (saveSecondPoint.y() < 4 || saveSecondPoint.y() > 6))
+    {
+        qDebug() << "不在圈内！";
+        qDebug() << saveSecondPoint.x() << saveSecondPoint.y();
+        return false;
+    }
+    return true;
+}
+
+bool board::che()
+{
+    if(saveSecondPoint.x() != saveFirstPoint.x() && saveSecondPoint.y() == saveFirstPoint.y())
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if((saveSecondPoint.x() - saveFirstPoint.x()) < 0)
+            {
+
+                if(s[i].col == saveFirstPoint.y() && s[i].row < saveFirstPoint.x() && s[i].row > saveSecondPoint.x())
+                {
+                    qDebug() << "上下的中间有棋1";
+                    break;
+                }
+            }else
+            {
+                if(s[i].col == saveFirstPoint.y() && s[i].row > saveFirstPoint.x() && s[i].row < saveSecondPoint.x())
+                {
+                    qDebug() << "上下的中间有棋1";
+                    break;
+                }
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+
+    }
+    else if(saveSecondPoint.x() == saveFirstPoint.x() && saveSecondPoint.y() != saveFirstPoint.y())
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if((saveSecondPoint.y() - saveFirstPoint.y()) < 0)
+            {
+                qDebug() << "saveSecondPoint.y() = " << saveSecondPoint.y() << "s[i].col = " << s[i].col << "saveFirstPoint.y()=" << saveFirstPoint.y();
+                if(s[i].row == saveFirstPoint.x() && s[i].col < saveFirstPoint.y() && s[i].col > saveSecondPoint.y())
+                {
+                    qDebug() << "左右中间有棋1";
+                    break;
+                }
+
+            }else
+            {
+                qDebug()<< "saveFirstPoint.y()=" << saveFirstPoint.y()<< "s[i].col = " << s[i].col  << "saveSecondPoint.y() = " << saveSecondPoint.y() ;
+                if(s[i].row == saveFirstPoint.x() && s[i].col > saveFirstPoint.y() && s[i].col < saveSecondPoint.y())
+                {
+                    qDebug() << "左右中间有棋2";
+                    break;
+                }
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+
+    }else
+    {
+        return false;
+    }
+}
+
+bool board::ma()
+{
+    int tepm1 = saveSecondPoint.x() - saveFirstPoint.x();
+    int tepm2 = saveSecondPoint.y() - saveFirstPoint.y();
+
+    if((tepm1 == -2 && tepm2 == -1) || (tepm1 == -2 && tepm2 == 1))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() - 1 && s[i].col == saveFirstPoint.y())
+            {
+                qDebug() << "上";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+
+    if((tepm1 == -1 && tepm2 == 2) || (tepm1 == 1 && tepm2 == 2))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y() + 1)
+            {
+                qDebug() << "右";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+    if((tepm1 == 2 && tepm2 == -1) || (tepm1 == 2 && tepm2 == 1))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() + 1 && s[i].col == saveFirstPoint.y())
+            {
+                qDebug() << "下";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+    if((tepm1 == -1 && tepm2 == -2) || (tepm1 == 1 && tepm2 == -2))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y() - 1)
+            {
+                qDebug() << "左";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+
+    return false;
+}
+
+bool board::xiang()
+{
+    if(saveSecondPoint.x() < 6) return false;
+
+    int tepm1 = saveSecondPoint.x() - saveFirstPoint.x();
+    int tepm2 = saveSecondPoint.y() - saveFirstPoint.y();
+
+    if((tepm1 == -2 && tepm2 == -2))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() - 1 && s[i].col == saveFirstPoint.y() - 1)
+            {
+                qDebug() << "左上";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+    if((tepm1 == -2 && tepm2 == 2))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() - 1 && s[i].col == saveFirstPoint.y() + 1)
+            {
+                qDebug() << "右上";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+    if((tepm1 == 2 && tepm2 == -2))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() + 1 && s[i].col == saveFirstPoint.y() - 1)
+            {
+                qDebug() << "左下";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+    if((tepm1 == 2 && tepm2 == 2))
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if(s[i].row == saveFirstPoint.x() + 1 && s[i].col == saveFirstPoint.y() + 1)
+            {
+                qDebug() << "右下";
+                break;
+            }
+        }
+        if(i > 32) return true;
+        else return false;
+    }
+
+    return false;
+}
+
+bool board::shi()
+{
+    if((saveSecondPoint.x() < 8 || saveSecondPoint.x() > 10) || (saveSecondPoint.y() < 4 || saveSecondPoint.y() > 6))
+    {
+        return false;
+    }
+
+    int tepm1 = saveSecondPoint.x() - saveFirstPoint.x();
+    int tepm2 = saveSecondPoint.y() - saveFirstPoint.y();
+
+    if(tepm1 == -1 && tepm2 == -1)return true;
+
+    if(tepm1 == -1 && tepm2 == 1)return true;
+
+    if(tepm1 == 1 && tepm2 == -1)return true;
+
+    if(tepm1 == 1 && tepm2 == 1)return true;
+
+    return false;
+
+}
+
+bool board::pao()
+{
+    int num = 0;
+    if(saveSecondPoint.x() != saveFirstPoint.x() && saveSecondPoint.y() == saveFirstPoint.y())
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if((saveSecondPoint.x() - saveFirstPoint.x()) < 0)
+            {
+
+                if(s[i].col == saveFirstPoint.y() && s[i].row < saveFirstPoint.x() && s[i].row > saveSecondPoint.x())
+                {
+                    qDebug() << "num++";
+                    num++;
+                }
+            }else
+            {
+                if(s[i].col == saveFirstPoint.y() && s[i].row > saveFirstPoint.x() && s[i].row < saveSecondPoint.x())
+                {
+                    qDebug() << "num++";
+                    num++;
+                }
+            }
+        }
+        qDebug() << "num = " << num;
+        if(num >= 2) return false;
+        if(num == 1)
+        {
+            for(int j = 1; j <= 32; j++)
+            {
+                if(s[j].dead == true || (s[j].row == saveFirstPoint.x() && s[j].col == saveFirstPoint.y()))
+                {
+                    continue;
+                }
+                if(s[j].row == saveSecondPoint.x() && s[j].col == saveSecondPoint.y()) return true;
+            }
+        }
+        if(num == 0)
+        {
+            int j = 1;
+            for(; j <= 32; j++)
+            {
+                if(s[j].dead == true || (s[j].row == saveFirstPoint.x() && s[j].col == saveFirstPoint.y()))
+                {
+                    continue;
+                }
+                if(s[j].row == saveSecondPoint.x() && s[j].col == saveSecondPoint.y()) break;
+            }
+            if(j > 32) return true;
+            else return false;
+        }
+
+    }
+    else if(saveSecondPoint.x() == saveFirstPoint.x() && saveSecondPoint.y() != saveFirstPoint.y())
+    {
+        int i = 1;
+        for(; i <= 32; i++)
+        {
+            if(s[i].dead == true || (s[i].row == saveFirstPoint.x() && s[i].col == saveFirstPoint.y()))
+            {
+                continue;
+            }
+            if((saveSecondPoint.y() - saveFirstPoint.y()) < 0)
+            {
+                if(s[i].row == saveFirstPoint.x() && s[i].col < saveFirstPoint.y() && s[i].col > saveSecondPoint.y())
+                {
+                    num++;
+                }
+
+            }else
+            {
+                //qDebug()<< "saveFirstPoint.y()=" << saveFirstPoint.y()<< "s[i].col = " << s[i].col  << "saveSecondPoint.y() = " << saveSecondPoint.y() ;
+                if(s[i].row == saveFirstPoint.x() && s[i].col > saveFirstPoint.y() && s[i].col < saveSecondPoint.y())
+                {
+                    num++;
+                }
+            }
+        }
+        qDebug() << "num = " << num;
+        if(num >= 2) return false;
+        if(num == 1)
+        {
+            for(int j = 1; j <= 32; j++)
+            {
+                if(s[j].dead == true || (s[j].row == saveFirstPoint.x() && s[j].col == saveFirstPoint.y()))
+                {
+                    continue;
+                }
+                if(s[j].row == saveSecondPoint.x() && s[j].col == saveSecondPoint.y()) return true;
+            }
+        }
+        if(num == 0)
+        {
+            int j = 1;
+            for(; j <= 32; j++)
+            {
+                if(s[j].dead == true || (s[j].row == saveFirstPoint.x() && s[j].col == saveFirstPoint.y()))
+                {
+                    continue;
+                }
+                if(s[j].row == saveSecondPoint.x() && s[j].col == saveSecondPoint.y()) break;
+            }
+            if(j > 32) return true;
+            else return false;
+        }
+
+
+    }else
+    {
+        return false;
+    }
+}
+
+bool board::bing()
+{
+    if(saveFirstPoint.x() < 6)
+    {
+        if(((saveSecondPoint.x() == saveFirstPoint.x() - 1) && (saveSecondPoint.y() == saveFirstPoint.y())) ||
+           ((saveSecondPoint.x() == saveFirstPoint.x()) && (saveSecondPoint.y() == saveFirstPoint.y() - 1)) ||
+           ((saveSecondPoint.x() == saveFirstPoint.x()) && (saveSecondPoint.y() == saveFirstPoint.y() + 1))
+          ) return true;
+        else return false;
+    }
+    else
+    {
+        if((saveSecondPoint.x() == saveFirstPoint.x() - 1) && (saveSecondPoint.y() == saveFirstPoint.y())) return true;
+        else return false;
+    }
+}
+
+
+
+
 
 
 
