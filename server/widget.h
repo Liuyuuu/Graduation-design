@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+#include "db.h"
+#include "server.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
