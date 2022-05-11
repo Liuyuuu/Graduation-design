@@ -18,8 +18,6 @@ db::db(QObject *parent) : QObject(parent)
         if(myDb->open())
         {
             qDebug() << "数据库打开成功, 可以读写数据了......";
-            qDebug() <<  ins(100234, "QGSQQk21RwhogqmM");
-
         }
         else
         {

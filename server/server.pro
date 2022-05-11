@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     db.cpp \
+    loginAndRegister.cpp \
     main.cpp \
     server.cpp \
     widget.cpp
 
 HEADERS += \
     db.h \
+    loginAndRegister.h \
     server.h \
     widget.h
 

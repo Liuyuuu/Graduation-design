@@ -18,6 +18,11 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+    server *a;
+
+private slots:
+    void on_setlisten_clicked();
+
 private:
     Ui::Widget *ui;
 };
