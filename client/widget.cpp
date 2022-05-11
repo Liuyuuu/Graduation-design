@@ -37,6 +37,8 @@ void widget::connectedSlots()
     connect(tcp, &network::disConnect, stme, &statusAndMenuBar::setNetworkNotConncet);
     connect(tcp, &network::disConnect, lgn, &login::psbOff);
     connect(lgn, &login::loginSend, tcp, &network::send);
+
+    //
     connect(stme->m1_1_act1, &QAction::triggered, tcp, &network::connectServer);
 
 }
