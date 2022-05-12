@@ -1,7 +1,7 @@
 #include "login.h"
 
-#define ZHUCE "zhuce"
-#define DENGLU "denglu"
+#define ZHUCE "01"
+#define DENGLU "00"
 
 #include <QMessageBox>
 
@@ -141,6 +141,15 @@ bool login::isId(QString str)
 bool login::isPasswd(QString str)
 {
     return str.contains(QRegExp("^[a-zA-Z0-9_-]{6,16}$"));
+}
+
+void login::instruct00()
+{
+    QMessageBox::information(NULL, "错误", "登录错误");
+}
+void login::instruct01()
+{
+    QMessageBox::information(NULL, "错误", "注册错误");
 }
 
 void login::psbOn()

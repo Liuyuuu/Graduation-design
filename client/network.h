@@ -19,6 +19,12 @@ signals:
     void connected();
     void disConnect();
     void ready();
+
+    void send00();
+    void send01();
+    void send02(QString);
+    void send03(QString);
+
 private:
     QTcpSocket * _tcp_login;
     QString _ip;

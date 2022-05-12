@@ -14,6 +14,7 @@ class board : public QWidget
 {
     Q_OBJECT
 public:
+
     explicit board(QWidget *parent = nullptr, bool mainRed = true);
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);

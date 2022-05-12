@@ -30,7 +30,13 @@ network::network(QObject *parent) : QObject(parent)
 
     // 收到数据
     connect(_tcp_login, &QTcpSocket::readyRead, this, [=]{
-        qDebug() << "接收到服务器数据";
+         QString str = _tcp_login->readAll().toStdString().data();
+         switch (str.mid(0,2).toUInt()) {
+             case 00: qDebug()<<"登录失败"; emit send00(); break;
+             case 01: qDebug()<<"注册失败"; emit send01(); break;
+             case 02: qDebug()<<"登录成功"; emit send02(str.mid(2,6)); break;
+             case 03: qDebug()<<"注册成功"; emit send03(str.mid(2,6)); break;
+         }
     });
 
 
