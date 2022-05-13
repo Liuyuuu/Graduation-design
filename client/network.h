@@ -24,6 +24,7 @@ signals:
     void send01();
     void send02(QString);
     void send03(QString);
+    void send04(bool,int);
 
 private:
     QTcpSocket * _tcp_login;

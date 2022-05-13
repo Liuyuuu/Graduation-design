@@ -22,6 +22,7 @@ public:
     void updateId(int row, int col);
     void moveChess(QPoint pt);
     int pointToId(QPoint p);
+    void setMainred(bool);
 
     bool rule(int FirstPointId);
     bool king();

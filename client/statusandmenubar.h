@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QStatusBar>
 #include <QLabel>
+#include <QDebug>
 
 class statusAndMenuBar : public QWidget
 {
@@ -15,6 +16,7 @@ public:
     explicit statusAndMenuBar(QWidget *parent = nullptr);
     void setNetworkConnect();
     void setNetworkNotConncet();
+    void setM2(int num, bool b);
 
     QMenuBar *mebr;
     QMenu * m1;

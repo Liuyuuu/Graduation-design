@@ -62,6 +62,12 @@ statusAndMenuBar::statusAndMenuBar(QWidget *parent) : QWidget(parent)
 
     stbr->addWidget(lab1);
     stbr->addWidget(widt);
+
+    //setM2(1,false);
+    setM2(2,false);
+    setM2(3,false);
+    setM2(4,false);
+
 }
 
 void statusAndMenuBar::setNetworkConnect()
@@ -79,3 +85,17 @@ void statusAndMenuBar::setNetworkNotConncet()
     m1_1_act1->setDisabled(false);
 
 }
+
+void statusAndMenuBar::setM2(int num, bool b)
+{
+
+    switch (num) {
+        case 4:if(b) m2_act4->setDisabled(false); else m2_act4->setEnabled(false);break;
+        case 3:if(b) m2_act3->setDisabled(false); else m2_act3->setEnabled(false);break;
+        case 2:if(b) m2_act2->setDisabled(false); else m2_act2->setEnabled(false);break;
+        case 1:if(b) m2_act1->setDisabled(false); else m2_act1->setEnabled(false);break;
+    }
+
+}
+
+

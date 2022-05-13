@@ -208,6 +208,11 @@ int board::pointToId(QPoint p)
     else return i;
 }
 
+void board::setMainred(bool b)
+{
+    myRed = b;
+}
+
 QPoint board::center(int row, int col)
 {
     return QPoint(col * d, row * d);
