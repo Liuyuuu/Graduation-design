@@ -23,7 +23,7 @@ public:
 
 signals:
     void returnResult(bool);
-    void returnTcp(QTcpSocket*);
+    void returnTcp(QTcpSocket*, int);
 
 };
 

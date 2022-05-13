@@ -15,6 +15,7 @@ void loginAndRegister::work()
 
     connect(myTcp, &QTcpSocket::readyRead, this, [=]{
 
+
         ValidationData();
 
     });
@@ -30,13 +31,14 @@ bool loginAndRegister::ValidationData()
         if(SocketList[i]->bytesAvailable() > 0)
         {
             QString str = SocketList[i]->readAll();
+            qDebug() << str;
             if(str.mid(0,2) == "00")
             {
                 if(databeas->sel(str.mid(2,6).toInt(), str.mid(8)))
                 {
                     // send02
                     SocketList[i]->write(QByteArray("02"+str.mid(2,6).toUtf8()));
-                    emit returnTcp(SocketList.takeAt(i));
+                    emit returnTcp(SocketList.takeAt(i), str.mid(2,6).toInt());
                     i--;
                     return true;
                 }else
@@ -54,7 +56,7 @@ bool loginAndRegister::ValidationData()
                 {
                     // send03
                     SocketList[i]->write(QByteArray("03"+str.mid(2,6).toUtf8()));
-                    emit returnTcp(SocketList.takeAt(i));
+                    emit returnTcp(SocketList.takeAt(i), str.mid(2,6).toInt());
                     i--;
                     return true;
                 }

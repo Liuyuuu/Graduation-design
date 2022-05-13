@@ -5,6 +5,10 @@
 #include <QTcpServer>
 
 #include "loginAndRegister.h"
+#include "gameaction.h"
+#include "user.h"
+
+
 
 class server : public QObject
 {
@@ -12,6 +16,11 @@ class server : public QObject
 public:
     explicit server(QObject *parent = nullptr);
     void getResult(bool r);
+    void action();
+    void beginToMatch(int num);
+    void stopToMatch(int num);
+
+
 
     loginAndRegister * logreg;
 
@@ -19,9 +28,11 @@ public:
     QTcpSocket *myTcp;
     QTcpSocket * t;
 
-    void getTcp(QTcpSocket * retTcp);
+    QList<user*> MatchQueue;
 
-    QList<QTcpSocket*> SocketList;
+    void getTcp(QTcpSocket * , int);
+
+    QList<user*> userList;
 
     bool Result;
 
@@ -30,6 +41,9 @@ public:
 signals:
     void myreadyRead(QString str);
     void setTcp(QTcpSocket* tcp);
+
+    void send04(int);
+    void send05(int);
 };
 
 #endif // SERVER_H

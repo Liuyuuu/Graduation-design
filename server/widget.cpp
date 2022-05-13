@@ -15,14 +15,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //db db;
-    //db.sel(1231,"sadfsadf");
-
     a = new server(this);
-
-
-
-
 
 
 
