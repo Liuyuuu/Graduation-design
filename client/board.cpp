@@ -3,6 +3,7 @@
 
 board::board(QWidget *parent, bool mainRed) : QWidget(parent), myRed(mainRed)
 {
+
     this->setGeometry(0, 30, 1400, 920);
     _id = 0;
     d = 82;
@@ -15,7 +16,10 @@ board::board(QWidget *parent, bool mainRed) : QWidget(parent), myRed(mainRed)
     {
         s[i].init(i, myRed);
     }
+
+    this->show();
 }
+
 
 void board::paintEvent(QPaintEvent *)
 {
@@ -202,6 +206,11 @@ int board::pointToId(QPoint p)
     }
     if(i > 32) return 0;
     else return i;
+}
+
+void board::setMainred(bool b)
+{
+    myRed = b;
 }
 
 QPoint board::center(int row, int col)

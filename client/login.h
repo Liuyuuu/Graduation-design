@@ -19,6 +19,9 @@ public:
     bool isId(QString str);
     bool isPasswd(QString str);
 
+    void instruct00();
+    void instruct01();
+
 
 signals:
     void loginSend(QByteArray str);
