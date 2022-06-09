@@ -27,6 +27,7 @@ signals:
     void connected();
     void disConnect();
     void ready();
+<<<<<<< HEAD
     void instruct00();
     void instruct01();
     void instruct02(int);
@@ -35,6 +36,14 @@ signals:
     void instruct11();
     void instruct12(QString str);
     void instruct14(QString str);
+=======
+
+    void send00();
+    void send01();
+    void send02(QString);
+    void send03(QString);
+    void send04(bool,int);
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 
 private:
     QTcpSocket * _tcp_login;

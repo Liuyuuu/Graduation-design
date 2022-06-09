@@ -15,6 +15,7 @@ class widget : public QWidget
     Q_OBJECT
 public:
     explicit widget(QWidget *parent = nullptr);
+<<<<<<< HEAD
     void myConnect();
     void successfulLogin();
     void startWindow();
@@ -25,6 +26,16 @@ public:
     void send07(int id, int x, int y);
     void respond11();
     void gameOver();
+=======
+    void connectedSlots();
+    void GameAction();
+
+    int userIdMe;
+    int userIdRival;
+
+    void instruct02(QString);
+    void instruct03(QString);
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 
 signals:
 

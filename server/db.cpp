@@ -30,8 +30,11 @@ db::db(QObject *parent) : QObject(parent)
     }
 }
 
+<<<<<<< HEAD
 
 // 数据库查询
+=======
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 bool db::sel(int user, QString passwd)
 {
     QSqlQuery query;
@@ -46,8 +49,11 @@ bool db::sel(int user, QString passwd)
     return false;
 }
 
+<<<<<<< HEAD
 
 // 数据库插入
+=======
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 bool db::ins(int user, QString passwd)
 {
     QSqlQuery query;

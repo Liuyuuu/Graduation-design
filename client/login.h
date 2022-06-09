@@ -25,6 +25,16 @@ public:
     void mySlots();
     void checkIDPasswd();
 
+<<<<<<< HEAD
+=======
+    void instruct00();
+    void instruct01();
+
+
+signals:
+    void loginSend(QByteArray str);
+public:
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
     QWidget * wgt1;
     QLabel * lab1;
     QLabel * lab2;

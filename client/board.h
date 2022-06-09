@@ -15,6 +15,7 @@ class board : public QWidget
 {
     Q_OBJECT
 public:
+
     explicit board(QWidget *parent = nullptr, bool mainRed = true);
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);
@@ -22,8 +23,13 @@ public:
     void updateId(int row, int col);
     void moveChess(QPoint pt);
     int pointToId(QPoint p);
+<<<<<<< HEAD
     void drawingBoard(bool tmp);
     void rivalMobile(QString str); /*** 对手移动 ***/
+=======
+    void setMainred(bool);
+
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
     bool rule(int FirstPointId);
     bool king();
     bool che();

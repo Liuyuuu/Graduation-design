@@ -3,6 +3,7 @@
 
 board::board(QWidget *parent, bool mainRed) : QWidget(parent), myRed(mainRed)
 {
+
     this->setGeometry(0, 30, 1400, 920);
     _id = 0;
     d = 82;
@@ -16,7 +17,10 @@ board::board(QWidget *parent, bool mainRed) : QWidget(parent), myRed(mainRed)
     {
         s[i].init(i, myRed);
     }
+
+    this->show();
 }
+
 
 void board::paintEvent(QPaintEvent *)
 {
@@ -205,6 +209,7 @@ int board::pointToId(QPoint p)
     else return i;
 }
 
+<<<<<<< HEAD
 void board::drawingBoard(bool tmp)
 {
     if(tmp)
@@ -237,6 +242,11 @@ void board::rivalMobile(QString str)
     update();
 
     if(s[21].dead == true) emit gameOver("11");
+=======
+void board::setMainred(bool b)
+{
+    myRed = b;
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 }
 
 QPoint board::center(int row, int col)

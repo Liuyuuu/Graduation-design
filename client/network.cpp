@@ -35,7 +35,21 @@ void network::myConnect()
     });
 
     // 收到数据
+<<<<<<< HEAD
     connect(_tcp_login, &QTcpSocket::readyRead, this, &network::command);
+=======
+    connect(_tcp_login, &QTcpSocket::readyRead, this, [=]{
+         QString str = _tcp_login->readAll().toStdString().data();
+         switch (str.mid(0,2).toUInt()) {
+             case 0: qDebug()<<"登录失败"; emit send00(); break;
+             case 1: qDebug()<<"注册失败"; emit send01(); break;
+             case 2: qDebug()<<"登录成功"; emit send02(str.mid(2,6)); break;
+             case 3: qDebug()<<"注册成功"; emit send03(str.mid(2,6)); break;
+         case 4: qDebug()<<"游戏开始"; emit send04(str.mid(2,1).toShort(), str.mid(3,6).toInt());break;
+         }
+    });
+
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 
 }
 
