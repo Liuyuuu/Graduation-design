@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     board.cpp \
+    chat.cpp \
     login.cpp \
     main.cpp \
     network.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     board.h \
+    chat.h \
     login.h \
     network.h \
     statusandmenubar.h \

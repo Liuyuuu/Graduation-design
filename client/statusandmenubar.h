@@ -20,7 +20,6 @@ public:
     QMenu * m1;
     QMenu * m2;
     QMenu * m3;
-
     QMenu * m1_1;
     QMenu * m1_2;
     QAction * m1_3;
@@ -32,7 +31,6 @@ public:
     QAction * m2_act3;
     QAction * m2_act4;
     QAction * m3_act1;
-
     QStatusBar * stbr;
     QLabel *lab1;
     QWidget *widt;

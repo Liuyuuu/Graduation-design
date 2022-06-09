@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QMessageBox>
+
 
 class login : public QWidget
 {
@@ -18,24 +20,26 @@ public:
     void psbOff();
     bool isId(QString str);
     bool isPasswd(QString str);
+    void respond00();
+    void respond01();
+    void mySlots();
+    void checkIDPasswd();
 
-
-signals:
-    void loginSend(QByteArray str);
-public:
     QWidget * wgt1;
-
     QLabel * lab1;
     QLabel * lab2;
     QLabel * lab3;
     QLabel * lab4;
-
     QLineEdit * lied1;
     QLineEdit * lied2;
     QLineEdit * lied3;
-
     QPushButton * psb1;
     QPushButton * psb2;
+
+
+signals:
+    void loginSend(QByteArray str);
+
 
 };
 

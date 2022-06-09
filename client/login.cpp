@@ -1,12 +1,29 @@
 #include "login.h"
 
-#define ZHUCE "zhuce"
-#define DENGLU "denglu"
+#define ZHUCE "01"
+#define DENGLU "00"
 
-#include <QMessageBox>
 
 login::login(QWidget *parent) : QWidget(parent)
 {
+
+    init(); /*** 初始化窗口 ***/
+
+    mySlots();
+
+}
+
+// 槽函数
+void login::mySlots()
+{
+    connect(psb1, &QPushButton::clicked, this, &login::transform);
+    connect(psb2, &QPushButton::clicked, this, &login::checkIDPasswd);
+}
+
+// 初始化界面
+void login::init()
+{
+    this->setGeometry(0, 30, 860, 680);
 
     wgt1 = new QWidget(this);
 
@@ -19,19 +36,8 @@ login::login(QWidget *parent) : QWidget(parent)
     lied2 = new QLineEdit(wgt1);
     lied3 = new QLineEdit(wgt1);
 
-    psb1 = new QPushButton(wgt1);
-    psb2 = new QPushButton(wgt1);
-
-    init();
-    psbOff();
-
-    connect(psb1, &QPushButton::clicked, this, &login::transform);
-
-}
-
-void login::init()
-{
-    this->setGeometry(0, 30, 860, 680);
+    psb1 = new QPushButton(wgt1); /*** 左按钮 ***/
+    psb2 = new QPushButton(wgt1); /*** 右按钮 ***/
 
     QFont ft1("宋体", 32);
     QFont ft2("宋体", 18);
@@ -48,8 +54,8 @@ void login::init()
     lab3->move(240, 320);
     lab4->setText("确认密码");
     lab4->setFont(ft2);
-    lab4->move(180, 380);
-    lab4->hide();
+    lab4->move(200, 380);
+
 
     lied1->setFont(ft3);
     lied1->setGeometry(330,260, 280, 36);
@@ -59,7 +65,7 @@ void login::init()
     lied3->setFont(ft3);
     lied3->setEchoMode(QLineEdit::Password);
     lied3->setGeometry(330,380, 280, 36);
-    lied3->hide();
+
 
     psb1->setText("注 册");
     psb1->setFont(ft3);
@@ -68,45 +74,16 @@ void login::init()
     psb2->setFont(ft3);
     psb2->setGeometry(470, 480, 140, 60);
 
-    connect(psb2, &QPushButton::clicked, this, [=](){
-        if(psb1->text() == "返 回")
-        {
-            if(!isId(lied1->text()))
-            {
-                QMessageBox::information(NULL, "错误", "账号为6位纯数字！");
-            }
-            else if(!isPasswd(lied2->text()))
-            {
-                QMessageBox::information(NULL, "错误", "密码为大小写、数字的组合，长度为6-16位！");
-            }else if(lied2->text() != lied3->text())
-            {
-                QMessageBox::information(NULL, "错误", "密码不一致");
-            }else
-            {
-                emit loginSend(ZHUCE + lied1->text().toUtf8() + lied2->text().toUtf8());
-            }
+    psbOff();
 
-        }else
-        {
-            if(!isId(lied1->text()))
-            {
-                QMessageBox::information(NULL, "错误", "账号为6位纯数字！");
-            }
-            else if(!isPasswd(lied2->text()))
-            {
-                QMessageBox::information(NULL, "错误", "密码为大小写、数字的组合，长度为6-16位！");
-            }else
-            {
-                emit loginSend(DENGLU + lied1->text().toUtf8() + lied2->text().toUtf8());
-            }
-        }
-
-        qDebug() << isPasswd(lied2->text());
-
-
-    });
+    //lab4->setText("验证码");
+    //lied3->setGeometry(330,380, 140, 36);
+    lab4->hide();
+    lied3->hide();
 }
 
+
+// 切换登录与注册界面
 void login::transform()
 {
     if(psb1->text() == "注 册")
@@ -117,34 +94,99 @@ void login::transform()
         lab4->show();
         lied3->show();
         QMessageBox::information(NULL, "注册说明", "账号为6位纯数字\n密码为大小写、数字的组合，长度为6-16位！");
+        lied3->setEchoMode(QLineEdit::Password);
+        lied1->setText("");
+        lied2->setText("");
+        lied3->setText("");
     }else
     {
         lab1->setText("中国象棋");
         psb1->setText("注 册");
         psb2->setText("登 录");
+        //lab4->setText("验证码");
         lab4->hide();
         lied3->hide();
+//        lied3->setGeometry(330,380, 160, 36);
+//        lied3->setEchoMode(QLineEdit::Normal);
+        lied1->setText("");
+        lied2->setText("");
+        lied3->setText("");
     }
 }
 
+
+// 按钮状态切换
 void login::psbOff()
 {
     psb1->setEnabled(false);
     psb2->setEnabled(false);
 }
-
-bool login::isId(QString str)
-{
-    return str.contains(QRegExp("^\\d{6}$"));
-}
-
-bool login::isPasswd(QString str)
-{
-    return str.contains(QRegExp("^[a-zA-Z0-9_-]{6,16}$"));
-}
-
 void login::psbOn()
 {
     psb1->setDisabled(false);
     psb2->setDisabled(false);
 }
+
+
+// 判断的正则表达式
+bool login::isId(QString str)
+{
+    return str.contains(QRegExp("^\\d{6}$"));
+}
+bool login::isPasswd(QString str)
+{
+    return str.contains(QRegExp("^[a-zA-Z0-9_-]{6,16}$"));
+}
+
+
+// 账号密码检查函数
+void login::checkIDPasswd()
+{
+    if(psb1->text() == "返 回")
+    {
+        if(!isId(lied1->text()))
+        {
+            QMessageBox::information(NULL, "错误", "账号为6位纯数字！");
+        }
+        else if(!isPasswd(lied2->text()))
+        {
+            QMessageBox::information(NULL, "错误", "密码为大小写、数字的组合，长度为6-16位！");
+        }else if(lied2->text() != lied3->text())
+        {
+            QMessageBox::information(NULL, "错误", "密码不一致");
+        }else
+        {
+            emit loginSend(ZHUCE + lied1->text().toUtf8() + lied2->text().toUtf8());
+        }
+
+    }else
+    {
+        if(!isId(lied1->text()))
+        {
+            QMessageBox::information(NULL, "错误", "账号为6位纯数字！");
+        }
+        else if(!isPasswd(lied2->text()))
+        {
+            QMessageBox::information(NULL, "错误", "密码为大小写、数字的组合，长度为6-16位！");
+        }else
+        {
+            emit loginSend(DENGLU + lied1->text().toUtf8() + lied2->text().toUtf8());
+        }
+    }
+}
+
+
+// 弹窗提示密码错误
+void login::respond00()
+{
+    QMessageBox::information(NULL, "错误", "密码错误");
+}
+void login::respond01()
+{
+    QMessageBox::information(NULL, "错误", "注册失败");
+}
+
+
+
+
+

@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QPen>
 #include <QPaintEvent>
+#include <QString>
 
 #include "stone.h"
 
@@ -21,7 +22,8 @@ public:
     void updateId(int row, int col);
     void moveChess(QPoint pt);
     int pointToId(QPoint p);
-
+    void drawingBoard(bool tmp);
+    void rivalMobile(QString str); /*** 对手移动 ***/
     bool rule(int FirstPointId);
     bool king();
     bool che();
@@ -32,25 +34,23 @@ public:
     bool bing();
 
     //返回像素坐标
-
     QPoint center(int row, int col);
     QPoint center(int id);
-
 
 
 public:
     int d;
     int r;
     int _id;
-
     bool myRed;
-
     QPoint saveFirstPoint;
     QPoint saveSecondPoint;
-    Stone s[33];
+    Stone s[33]; /*** 棋子数组 ***/
+    bool tag; /*** 标记是否该自己走棋 ***/
 
 signals:
-
+    void EmitMoveChess(int, int, int);
+    void gameOver(QByteArray);
 };
 
 #endif // BOARD_H

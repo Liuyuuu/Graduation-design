@@ -2,6 +2,13 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QSqlDatabase>
+#include <QDebug>
+#include <QTcpServer>
+#include <QPushButton>
+
+#include "db.h"
+#include "server.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -14,6 +21,11 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+
+    server *a;
+
+private slots:
+    void on_setlisten_clicked();
 
 private:
     Ui::Widget *ui;

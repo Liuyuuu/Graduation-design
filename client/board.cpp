@@ -7,6 +7,7 @@ board::board(QWidget *parent, bool mainRed) : QWidget(parent), myRed(mainRed)
     _id = 0;
     d = 82;
     r = d/2;
+    tag = true;
 
     saveFirstPoint = QPoint(0,0);
     saveSecondPoint = QPoint(0,0);
@@ -94,8 +95,8 @@ void board::paintEvent(QPaintEvent *)
 void board::mouseReleaseEvent(QMouseEvent *ev)
 {
     QPoint pt = ev->pos();
+    if(tag)
     moveChess(pt);
-
 }
 
 void board::moveChess(QPoint pt)
@@ -136,6 +137,7 @@ void board::moveChess(QPoint pt)
                 s[temp].col = saveSecondPoint.y();
                 saveSecondPoint = QPoint(0,0);
                 qDebug() << "移动" << temp << temp2;
+                emit EmitMoveChess(temp, s[temp].row ,s[temp].col);
             }
 
         }else if(temp2 != temp && s[temp2].red != myRed && temp2 != -1)
@@ -147,10 +149,9 @@ void board::moveChess(QPoint pt)
                 s[temp].col = saveSecondPoint.y();
                 saveSecondPoint = QPoint(0,0);
                 qDebug() << "吃棋" << temp << temp2;
+                emit EmitMoveChess(temp, s[temp].row ,s[temp].col);
             }
         }
-
-
     }
 
     update();
@@ -202,6 +203,40 @@ int board::pointToId(QPoint p)
     }
     if(i > 32) return 0;
     else return i;
+}
+
+void board::drawingBoard(bool tmp)
+{
+    if(tmp)
+    {
+        for(int i = 1; i <= 32; i++)
+        {
+            s[i].red = !s[i].red;
+        }
+        myRed = !myRed;
+        update();
+    }
+
+}
+
+void board::rivalMobile(QString str)
+{
+
+    int pawnID = str.mid(0,2).toUInt();
+    int x = str.mid(2,2).toUInt();
+    int y = str.mid(4,2).toUInt();
+    for(int i = 1 ; i <= 32; i++)
+    {
+        if(s[i].row == x && s[i].col == y) s[i].dead = true;
+    }
+
+    qDebug() << "棋子移动" << str;
+    s[pawnID].row = x;
+    s[pawnID].col = y;
+    tag = !tag;
+    update();
+
+    if(s[21].dead == true) emit gameOver("11");
 }
 
 QPoint board::center(int row, int col)

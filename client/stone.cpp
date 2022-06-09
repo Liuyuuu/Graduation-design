@@ -5,6 +5,7 @@ Stone::Stone(QObject *parent) : QObject(parent)
 
 }
 
+// 获取棋子类型
 QString Stone::getText()
 {
     switch(this->type)
@@ -40,6 +41,7 @@ QString Stone::getText()
     }
 }
 
+// 初始化棋子
 void Stone::init(int sid, bool mainRed)
 {
     this->id = sid;
@@ -64,9 +66,9 @@ void Stone::init(int sid, bool mainRed)
     {2, 3, Stone::PAO},
     {8, 3, Stone::PAO},
     {1, 4, Stone::BING},
-    {3, 4, Stone::BING},
-    {5, 4, Stone::BING},
     {7, 4, Stone::BING},
+    {5, 4, Stone::BING},
+    {3, 4, Stone::BING},
     {9, 4, Stone::BING}};
 
     if(id <= 16) {
