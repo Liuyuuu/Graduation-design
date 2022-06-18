@@ -18,7 +18,11 @@ public:
 
 
     QTcpSocket *myTcp;
+<<<<<<< HEAD
     QList<QTcpSocket*> SocketList;  //连接服务器的Socket列表
+=======
+    QList<QTcpSocket*> SocketList;
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
     db * databeas;
 
 signals:

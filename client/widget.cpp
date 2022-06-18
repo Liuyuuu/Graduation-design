@@ -4,8 +4,14 @@
 
 widget::widget(QWidget *parent) : QWidget(parent)
 {
+<<<<<<< HEAD
     rivalId = 0;
     id = 0;
+=======
+    userIdMe = 0;
+    userIdRival = 0;
+
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
     setFixedSize(860, 680);
 
 
@@ -13,9 +19,23 @@ widget::widget(QWidget *parent) : QWidget(parent)
     stme = new statusAndMenuBar(this);
     lgn = new login(this);
 
+<<<<<<< HEAD
     //successfulLogin();
     myConnect();
 
+=======
+    connectedSlots();
+
+    //GameAction();
+    if(false)
+    {
+        lgn->close();
+        setFixedSize(1400, 980);
+        stme->mebr->setFixedSize(1400,30);
+        stme->stbr->setGeometry(0,950, 1400, 30);
+        boardChess = new board(this, true);
+    }
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 
 
 }
@@ -58,6 +78,34 @@ void widget::myConnect()
     connect(tcp, &network::instruct06, this, &widget::respond06);
     connect(tcp, &network::instruct11, this, &widget::respond11);
 
+
+    connect(tcp, &network::send00, lgn, &login::instruct00);
+    connect(tcp, &network::send01, lgn, &login::instruct01);
+    connect(tcp, &network::send02, this, &widget::instruct02);
+    connect(tcp, &network::send03, this, &widget::instruct03);
+
+}
+
+void widget::instruct02(QString tmp)
+{
+    userIdMe = tmp.toInt();
+    GameAction();
+
+}
+void widget::instruct03(QString tmp)
+{
+    userIdMe = tmp.toInt();
+    GameAction();
+}
+
+void widget::GameAction()
+{
+    lgn->close();
+    setFixedSize(1400, 980);
+    stme->setFixedSize(1400, 980);
+    stme->mebr->setFixedSize(1400,30);
+    stme->stbr->setGeometry(0,950, 1400, 30);
+    boardChess = new board(this, true);
 
 }
 

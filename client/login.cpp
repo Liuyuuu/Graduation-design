@@ -121,6 +121,29 @@ void login::psbOff()
     psb1->setEnabled(false);
     psb2->setEnabled(false);
 }
+<<<<<<< HEAD
+=======
+
+bool login::isId(QString str)
+{
+    return str.contains(QRegExp("^\\d{6}$"));
+}
+
+bool login::isPasswd(QString str)
+{
+    return str.contains(QRegExp("^[a-zA-Z0-9_-]{6,16}$"));
+}
+
+void login::instruct00()
+{
+    QMessageBox::information(NULL, "错误", "登录错误");
+}
+void login::instruct01()
+{
+    QMessageBox::information(NULL, "错误", "注册错误");
+}
+
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 void login::psbOn()
 {
     psb1->setDisabled(false);

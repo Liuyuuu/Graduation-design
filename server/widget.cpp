@@ -1,7 +1,14 @@
 #include "widget.h"
 #include "ui_widget.h"
 
+<<<<<<< HEAD
 
+=======
+#include <QSqlDatabase>
+#include <QDebug>
+#include <QTcpServer>
+#include <QPushButton>
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
 
 
 

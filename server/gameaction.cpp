@@ -1,5 +1,6 @@
 #include "gameaction.h"
 
+<<<<<<< HEAD
 
 // send06 对局开始黑方红方 06 bool(1) ID(6)
 gameAction::gameAction(user * tmp1, user * tmp2, QObject *parent) :user1(tmp1), user2(tmp2), QObject(parent)
@@ -197,3 +198,10 @@ void gameAction::send12(bool tmp,QString str)
     }
 }
 
+=======
+gameAction::gameAction(user * tmp1, user * tmp2, QObject *parent) :user1(tmp1), user2(tmp2), QObject(parent)
+{
+    user1->tcp->write(QByteArray("040" + user2->id));
+    user2->tcp->write(QByteArray("041" + user1->id));
+}
+>>>>>>> da6ad27a8e86736717b61087ca6698836ff847d9
